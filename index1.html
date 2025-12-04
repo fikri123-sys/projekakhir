@@ -1,0 +1,2191 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coffe Mardupi - Login & Order System</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* ===== GLOBAL STYLES ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        /* ===== LOGIN PAGE STYLES ===== */
+        .login-page {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #8B4513 0%, #D2691E 100%);
+            padding: 20px;
+            transition: background 0.5s ease;
+        }
+
+        .login-container {
+            width: 100%;
+            max-width: 450px;
+            background-color: rgba(255, 253, 251, 0.97);
+            border-radius: 15px;
+            box-shadow: 0 15px 30px rgba(139, 69, 19, 0.3);
+            overflow: hidden;
+            transition: transform 0.3s ease;
+            border: 1px solid #D2B48C;
+        }
+
+        .login-container:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(139, 69, 19, 0.4);
+        }
+
+        .login-header {
+            background: linear-gradient(to right, #8B4513, #A0522D);
+            color: #FFF8DC;
+            padding: 25px 30px;
+            text-align: center;
+            border-bottom: 3px solid #D2691E;
+        }
+
+        .login-header h1 {
+            font-size: 28px;
+            margin-bottom: 5px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+        }
+
+        .login-header p {
+            font-size: 15px;
+            opacity: 0.95;
+        }
+
+        .login-form-container {
+            padding: 30px;
+            background-color: #FFFEFC;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #5D4037;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 15px 15px 15px 45px;
+            border: 2px solid #D2B48C;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.3s;
+            background-color: #FFFEFC;
+            color: #5D4037;
+        }
+
+        .input-group input:focus {
+            border-color: #8B4513;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(139, 69, 19, 0.1);
+            background-color: #FFFEF9;
+        }
+
+        .input-group input::placeholder {
+            color: #A1887F;
+        }
+
+        .input-group i {
+            position: absolute;
+            left: 15px;
+            top: 42px;
+            color: #8B4513;
+            font-size: 18px;
+        }
+
+        .remember-forgot {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            font-size: 14px;
+        }
+
+        .remember-forgot a {
+            color: #8B4513;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .remember-forgot a:hover {
+            text-decoration: underline;
+            color: #5D4037;
+        }
+
+        .checkbox-container {
+            display: flex;
+            align-items: center;
+            color: #5D4037;
+        }
+
+        .checkbox-container input {
+            margin-right: 8px;
+            accent-color: #8B4513;
+        }
+
+        .btn-submit {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(to right, #8B4513, #A0522D);
+            color: #FFF8DC;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 10px;
+            box-shadow: 0 4px 6px rgba(139, 69, 19, 0.2);
+        }
+
+        .btn-submit:hover {
+            background: linear-gradient(to right, #5D4037, #8B4513);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(139, 69, 19, 0.3);
+        }
+
+        .btn-submit:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 4px rgba(139, 69, 19, 0.2);
+        }
+
+        .switch-link {
+            text-align: center;
+            margin-top: 25px;
+            font-size: 15px;
+            color: #5D4037;
+        }
+
+        .switch-link a {
+            color: #8B4513;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .switch-link a:hover {
+            text-decoration: underline;
+            color: #5D4037;
+        }
+
+        .error-message {
+            color: #D84315;
+            font-size: 14px;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .success-message {
+            background-color: #388E3C;
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            margin-bottom: 20px;
+            display: none;
+            border-left: 4px solid #2E7D32;
+        }
+
+        .show-password {
+            position: absolute;
+            right: 15px;
+            top: 42px;
+            cursor: pointer;
+            color: #8B4513;
+        }
+
+        .show-password:hover {
+            color: #5D4037;
+        }
+
+        .password-strength {
+            height: 5px;
+            background-color: #E0E0E0;
+            border-radius: 5px;
+            margin-top: 8px;
+            overflow: hidden;
+        }
+
+        .strength-meter {
+            height: 100%;
+            width: 0%;
+            transition: width 0.3s, background-color 0.3s;
+        }
+
+        /* Halaman registrasi */
+        .registration-form {
+            display: none;
+        }
+
+        .login-page-form {
+            display: block;
+        }
+
+        .form-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .form-header h2 {
+            color: #5D4037;
+        }
+
+        .back-to-login {
+            color: #8B4513;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .back-to-login:hover {
+            text-decoration: underline;
+            color: #5D4037;
+        }
+
+        /* Responsive design untuk login */
+        @media (max-width: 500px) {
+            .login-container {
+                max-width: 100%;
+            }
+            
+            .login-form-container {
+                padding: 20px;
+            }
+            
+            .remember-forgot {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .remember-forgot a {
+                margin-top: 10px;
+            }
+        }
+
+        .demo-credentials {
+            background-color: #F5F5F5;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 20px;
+            font-size: 14px;
+            border-left: 4px solid #8B4513;
+            color: #5D4037;
+        }
+
+        .demo-credentials h4 {
+            color: #5D4037;
+            margin-bottom: 8px;
+        }
+
+        .demo-credentials p {
+            color: #795548;
+            margin-bottom: 5px;
+        }
+
+        /* ===== COFFE MARDUPI APP STYLES ===== */
+        .coffe-app {
+            display: none;
+        }
+
+        /* Variabel CSS untuk tema coklat */
+        :root {
+            --primary: #8B4513;
+            --secondary: #D2691E;
+            --accent: #FFD700;
+            --dark: #2d3047;
+            --light: #f7f9fc;
+            --success: #06d6a0;
+            --warning: #ff9e1a;
+            --danger: #ef476f;
+            --coffee: #6F4E37;
+            --tea: #C8A2C8;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            --radius: 12px;
+        }
+
+        .app-header {
+            background: linear-gradient(to right, #8B4513, #A0522D);
+            color: white;
+            padding: 1.5rem;
+            text-align: center;
+            font-size: 1.8rem;
+            font-weight: 700;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .app-header .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 8px 15px;
+            border-radius: 30px;
+        }
+
+        .user-avatar {
+            width: 35px;
+            height: 35px;
+            background: white;
+            color: #8B4513;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .logout-btn {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 5px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+
+        .logout-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 1.5rem;
+            padding: 1.5rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .modul {
+            background: white;
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s ease;
+        }
+
+        .modul:hover {
+            transform: translateY(-5px);
+        }
+
+        .modul h2 {
+            color: var(--dark);
+            margin-bottom: 1.2rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--accent);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .menu-tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            border-bottom: 2px solid #eee;
+        }
+
+        .menu-tab {
+            padding: 0.8rem 1.5rem;
+            background: #f8f9fa;
+            color: var(--dark);
+            border: none;
+            border-radius: 8px 8px 0 0;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .menu-tab.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        .menu-tab:hover:not(.active) {
+            background: #e9ecef;
+        }
+
+        .menu-content {
+            display: none;
+        }
+
+        .menu-content.active {
+            display: block;
+        }
+
+        .menu-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            gap: 1rem;
+        }
+
+        .menu-item {
+            background: var(--light);
+            border-radius: var(--radius);
+            padding: 1rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .menu-item:hover {
+            border-color: var(--secondary);
+            transform: scale(1.03);
+        }
+
+        .menu-item.food:hover {
+            border-color: var(--secondary);
+        }
+
+        .menu-item.drink:hover {
+            border-color: var(--coffee);
+        }
+
+        .menu-item img {
+            width: 100%;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+        }
+
+        .menu-item h3 {
+            font-size: 1rem;
+            margin-bottom: 0.3rem;
+            color: var(--dark);
+        }
+
+        .menu-item .price {
+            color: var(--primary);
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+
+        .menu-item .category-badge {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background: var(--accent);
+            color: var(--dark);
+            padding: 0.2rem 0.5rem;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 600;
+        }
+
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.8rem;
+            border-bottom: 1px solid #eee;
+            background: var(--light);
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+        }
+
+        .cart-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+
+        .cart-item-info {
+            flex-grow: 1;
+        }
+
+        .cart-item-name {
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .cart-item-price {
+            color: var(--primary);
+            font-size: 0.9rem;
+        }
+
+        .cart-item-catatan {
+            font-size: 0.8rem;
+            color: #666;
+            font-style: italic;
+            margin-top: 0.2rem;
+        }
+
+        .cart-item-controls {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .cart-item-controls button {
+            background: var(--secondary);
+            color: white;
+            border: none;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+
+        .cart-item-controls button:hover {
+            background: #b3591a;
+            transform: scale(1.1);
+        }
+
+        .cart-item-controls .delete-btn {
+            background: var(--danger);
+        }
+
+        .cart-item-controls .delete-btn:hover {
+            background: #e0355f;
+        }
+
+        .cart-item-controls .edit-btn {
+            background: var(--warning);
+        }
+
+        .cart-item-controls .edit-btn:hover {
+            background: #e68a00;
+        }
+
+        .quantity-display {
+            min-width: 30px;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .total {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--dark);
+            margin: 1rem 0;
+            text-align: right;
+            padding-top: 1rem;
+            border-top: 2px dashed #ddd;
+        }
+
+        button {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            width: 100%;
+        }
+
+        button:hover {
+            background: #7a3a10;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(139, 69, 19, 0.3);
+        }
+
+        button.secondary {
+            background: var(--secondary);
+        }
+
+        button.secondary:hover {
+            background: #b3591a;
+            box-shadow: 0 4px 8px rgba(210, 105, 30, 0.3);
+        }
+
+        button.accent {
+            background: var(--accent);
+            color: var(--dark);
+        }
+
+        button.accent:hover {
+            background: #e6c200;
+            box-shadow: 0 4px 8px rgba(255, 215, 0, 0.3);
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        label {
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        input, textarea, select {
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border 0.3s ease;
+        }
+
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: var(--secondary);
+            box-shadow: 0 0 0 2px rgba(210, 105, 30, 0.2);
+        }
+
+        #info-pembayaran, #info-pengiriman {
+            background: var(--light);
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            border-left: 4px solid var(--success);
+        }
+
+        .status-indicator {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+
+        .status-indicator::before {
+            content: '';
+            position: absolute;
+            top: 15px;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: #eee;
+            z-index: 1;
+        }
+
+        .status-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            z-index: 2;
+        }
+
+        .status-dot {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: white;
+            border: 3px solid #eee;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .status-step.active .status-dot {
+            background: var(--secondary);
+            border-color: var(--secondary);
+            color: white;
+        }
+
+        .status-step.completed .status-dot {
+            background: var(--success);
+            border-color: var(--success);
+            color: white;
+        }
+
+        .status-label {
+            font-size: 0.8rem;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .riwayat-item {
+            background: var(--light);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border-left: 4px solid var(--primary);
+        }
+
+        .riwayat-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+        }
+
+        .riwayat-nama {
+            font-weight: 700;
+            color: var(--dark);
+        }
+
+        .riwayat-tanggal {
+            color: #777;
+            font-size: 0.9rem;
+        }
+
+        .riwayat-detail {
+            font-size: 0.9rem;
+            color: #555;
+        }
+
+        footer {
+            text-align: center;
+            padding: 1.5rem;
+            background: var(--dark);
+            color: white;
+            margin-top: 2rem;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 2rem;
+            color: #777;
+        }
+
+        .empty-state i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: #ddd;
+        }
+
+        .edit-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .edit-modal-content {
+            background: white;
+            padding: 2rem;
+            border-radius: var(--radius);
+            width: 90%;
+            max-width: 500px;
+            box-shadow: var(--shadow);
+        }
+
+        .edit-modal h3 {
+            margin-bottom: 1rem;
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .edit-form-group {
+            margin-bottom: 1rem;
+        }
+
+        .edit-form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .edit-modal-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .edit-modal-buttons button {
+            flex: 1;
+        }
+
+        .edit-modal-buttons .cancel-btn {
+            background: #6c757d;
+        }
+
+        .edit-modal-buttons .cancel-btn:hover {
+            background: #5a6268;
+        }
+
+        .cart-actions {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .cart-actions button {
+            flex: 1;
+        }
+
+        .clear-cart-btn {
+            background: var(--danger);
+        }
+
+        .clear-cart-btn:hover {
+            background: #e0355f;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+            
+            .menu-list {
+                grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            }
+            
+            .status-indicator {
+                flex-wrap: wrap;
+                gap: 1rem;
+            }
+            
+            .status-indicator::before {
+                display: none;
+            }
+            
+            .cart-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.5rem;
+            }
+            
+            .cart-item-controls {
+                align-self: flex-end;
+            }
+            
+            .menu-tabs {
+                flex-wrap: wrap;
+            }
+            
+            .app-header {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .user-info {
+                margin-top: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- ===== LOGIN PAGE ===== -->
+    <div class="login-page" id="loginPage">
+        <div class="login-container">
+            <div class="login-header">
+                <h1><i class="fas fa-coffee"></i> Coffe Mardupi</h1>
+                <p>Masuk ke akun Anda untuk melanjutkan</p>
+            </div>
+            
+            <div class="login-form-container">
+                <div class="success-message" id="successMessage">
+                    Login berhasil! Mengalihkan...
+                </div>
+                
+                <form id="loginForm" class="login-page-form">
+                    <div class="input-group">
+                        <label for="loginUsername"><i class="fas fa-user"></i> Username / Email</label>
+                        <input type="text" id="loginUsername" placeholder="Masukkan username atau email">
+                        <i class="fas fa-user"></i>
+                        <div class="error-message" id="loginUsernameError">
+                            Username/email harus diisi!
+                        </div>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="loginPassword"><i class="fas fa-key"></i> Password</label>
+                        <input type="password" id="loginPassword" placeholder="Masukkan password">
+                        <i class="fas fa-key"></i>
+                        <span class="show-password" id="showLoginPassword">
+                            <i class="fas fa-eye"></i>
+                        </span>
+                        <div class="error-message" id="loginPasswordError">
+                            Password harus diisi!
+                        </div>
+                    </div>
+                    
+                    <div class="remember-forgot">
+                        <div class="checkbox-container">
+                            <input type="checkbox" id="rememberMe">
+                            <label for="rememberMe">Ingat saya</label>
+                        </div>
+                        <a href="#" id="forgotPassword">Lupa password?</a>
+                    </div>
+                    
+                    <button type="submit" class="btn-submit">
+                        <i class="fas fa-sign-in-alt"></i> Login
+                    </button>
+                    
+                    <div class="switch-link">
+                        Tidak punya akun? <a href="#" id="showRegister">Daftar di sini</a>
+                    </div>
+                </form>
+                
+                <form id="registerForm" class="registration-form">
+                    <div class="form-header">
+                        <h2>Buat Akun Baru</h2>
+                        <a href="#" class="back-to-login" id="showLogin">
+                            <i class="fas fa-arrow-left"></i> Kembali ke Login
+                        </a>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="registerName"><i class="fas fa-user"></i> Nama Lengkap</label>
+                        <input type="text" id="registerName" placeholder="Masukkan nama lengkap">
+                        <i class="fas fa-user"></i>
+                        <div class="error-message" id="registerNameError">
+                            Nama lengkap harus diisi!
+                        </div>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="registerEmail"><i class="fas fa-envelope"></i> Email</label>
+                        <input type="email" id="registerEmail" placeholder="Masukkan email">
+                        <i class="fas fa-envelope"></i>
+                        <div class="error-message" id="registerEmailError">
+                            Email harus valid!
+                        </div>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="registerUsername"><i class="fas fa-user-tag"></i> Username</label>
+                        <input type="text" id="registerUsername" placeholder="Masukkan username">
+                        <i class="fas fa-user-tag"></i>
+                        <div class="error-message" id="registerUsernameError">
+                            Username harus diisi (min. 3 karakter)!
+                        </div>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="registerPassword"><i class="fas fa-key"></i> Password</label>
+                        <input type="password" id="registerPassword" placeholder="Masukkan password">
+                        <i class="fas fa-key"></i>
+                        <span class="show-password" id="showRegisterPassword">
+                            <i class="fas fa-eye"></i>
+                        </span>
+                        <div class="password-strength">
+                            <div class="strength-meter" id="passwordStrength"></div>
+                        </div>
+                        <div class="error-message" id="registerPasswordError">
+                            Password harus diisi (min. 6 karakter)!
+                        </div>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="confirmPassword"><i class="fas fa-key"></i> Konfirmasi Password</label>
+                        <input type="password" id="confirmPassword" placeholder="Ulangi password">
+                        <i class="fas fa-key"></i>
+                        <span class="show-password" id="showConfirmPassword">
+                            <i class="fas fa-eye"></i>
+                        </span>
+                        <div class="error-message" id="confirmPasswordError">
+                            Konfirmasi password tidak cocok!
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="btn-submit">
+                        <i class="fas fa-user-plus"></i> Daftar Akun
+                    </button>
+                </form>
+                
+                <div class="demo-credentials">
+                    <h4><i class="fas fa-info-circle"></i> Akun Demo:</h4>
+                    <p><strong>Username:</strong> admin</p>
+                    <p><strong>Password:</strong> password123</p>
+                    <p><strong>Atau gunakan email:</strong> admin@example.com</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== COFFE MARDUPI APP ===== -->
+    <div class="coffe-app" id="coffeApp">
+        <header class="app-header">
+            <div class="logo">
+                <i class="fas fa-coffee"></i> COFFE_MARDUPI
+            </div>
+            <div class="user-info">
+                <div class="user-avatar" id="userAvatar">A</div>
+                <div>
+                    <div id="userName">Administrator</div>
+                    <div id="userEmail" style="font-size: 12px;">admin@example.com</div>
+                </div>
+                <button class="logout-btn" id="logoutBtn">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
+            </div>
+        </header>
+
+        <main class="container">
+            <!-- MODUL MENU -->
+            <section id="modul-menu" class="modul">
+                <h2><i class="fas fa-utensils"></i> Menu Coffe Mardupi</h2>
+                
+                <div class="menu-tabs">
+                    <button class="menu-tab active" data-tab="makanan">
+                        <i class="fas fa-utensils"></i> Makanan
+                    </button>
+                    <button class="menu-tab" data-tab="minuman">
+                        <i class="fas fa-coffee"></i> Minuman
+                    </button>
+                    <button class="menu-tab" data-tab="kopi">
+                        <i class="fas fa-mug-hot"></i> Kopi Spesial
+                    </button>
+                </div>
+                
+                <!-- Menu Makanan -->
+                <div class="menu-content active" id="makanan-content">
+                    <div class="menu-list" id="menu-makanan"></div>
+                </div>
+                
+                <!-- Menu Minuman -->
+                <div class="menu-content" id="minuman-content">
+                    <div class="menu-list" id="menu-minuman"></div>
+                </div>
+                
+                <!-- Menu Kopi Spesial -->
+                <div class="menu-content" id="kopi-content">
+                    <div class="menu-list" id="menu-kopi"></div>
+                </div>
+            </section>
+
+            <!-- MODUL KERANJANG -->
+            <section id="modul-keranjang" class="modul">
+                <h2><i class="fas fa-shopping-cart"></i> Keranjang Belanja</h2>
+                <div class="status-indicator">
+                    <div class="status-step active">
+                        <div class="status-dot">1</div>
+                        <div class="status-label">Keranjang</div>
+                    </div>
+                    <div class="status-step">
+                        <div class="status-dot">2</div>
+                        <div class="status-label">Checkout</div>
+                    </div>
+                    <div class="status-step">
+                        <div class="status-dot">3</div>
+                        <div class="status-label">Pembayaran</div>
+                    </div>
+                    <div class="status-step">
+                        <div class="status-dot">4</div>
+                        <div class="status-label">Selesai</div>
+                    </div>
+                </div>
+                
+                <div id="cart-items"></div>
+                
+                <div class="empty-state" id="empty-cart">
+                    <i class="fas fa-shopping-cart"></i>
+                    <p>Keranjang belanja Anda kosong</p>
+                    <p>Silakan pilih makanan atau minuman dari menu</p>
+                </div>
+                
+                <p class="total">Total: Rp <span id="total">0</span></p>
+                
+                <div class="cart-actions">
+                    <button id="clear-cart" class="clear-cart-btn">
+                        <i class="fas fa-trash"></i> Kosongkan Keranjang
+                    </button>
+                    <button id="lanjut-checkout" class="accent">
+                        <i class="fas fa-arrow-right"></i> Lanjut ke Checkout
+                    </button>
+                </div>
+            </section>
+
+            <!-- MODUL CHECKOUT -->
+            <section id="modul-checkout" class="modul" style="display:none;">
+                <h2><i class="fas fa-clipboard-list"></i> Checkout</h2>
+                <div class="status-indicator">
+                    <div class="status-step completed">
+                        <div class="status-dot"><i class="fas fa-check"></i></div>
+                        <div class="status-label">Keranjang</div>
+                    </div>
+                    <div class="status-step active">
+                        <div class="status-dot">2</div>
+                        <div class="status-label">Checkout</div>
+                    </div>
+                    <div class="status-step">
+                        <div class="status-dot">3</div>
+                        <div class="status-label">Pembayaran</div>
+                    </div>
+                    <div class="status-step">
+                        <div class="status-dot">4</div>
+                        <div class="status-label">Selesai</div>
+                    </div>
+                </div>
+                <form id="checkout-form">
+                    <label for="nama">Nama Pelanggan:</label>
+                    <input type="text" id="nama" required placeholder="Masukkan nama lengkap">
+                    
+                    <label for="alamat">Alamat Pengiriman:</label>
+                    <textarea id="alamat" required placeholder="Masukkan alamat lengkap untuk pengiriman" rows="3"></textarea>
+                    
+                    <label for="metode-pembayaran">Metode Pembayaran:</label>
+                    <select id="metode-pembayaran" required>
+                        <option value="">-- Pilih Metode --</option>
+                        <option value="Transfer Bank">Transfer Bank</option>
+                        <option value="Kartu Kredit">Kartu Kredit</option>
+                        <option value="E-Wallet">E-Wallet (OVO, Gopay, Dana)</option>
+                        <option value="COD">Bayar di Tempat (COD)</option>
+                    </select>
+                    
+                    <button type="submit" class="accent">
+                        <i class="fas fa-credit-card"></i> Proses Pembayaran
+                    </button>
+                </form>
+            </section>
+
+            <!-- MODUL PEMBAYARAN -->
+            <section id="modul-pembayaran" class="modul" style="display:none;">
+                <h2><i class="fas fa-money-bill-wave"></i> Pembayaran</h2>
+                <div class="status-indicator">
+                    <div class="status-step completed">
+                        <div class="status-dot"><i class="fas fa-check"></i></div>
+                        <div class="status-label">Keranjang</div>
+                    </div>
+                    <div class="status-step completed">
+                        <div class="status-dot"><i class="fas fa-check"></i></div>
+                        <div class="status-label">Checkout</div>
+                    </div>
+                    <div class="status-step active">
+                        <div class="status-dot">3</div>
+                        <div class="status-label">Pembayaran</div>
+                    </div>
+                    <div class="status-step">
+                        <div class="status-dot">4</div>
+                        <div class="status-label">Selesai</div>
+                    </div>
+                </div>
+                <div id="info-pembayaran"></div>
+                <button id="lanjut-dapur" class="secondary">
+                    <i class="fas fa-utensils"></i> Konfirmasi & Kirim ke Dapur
+                </button>
+            </section>
+
+            <!-- MODUL DAPUR -->
+            <section id="modul-dapur" class="modul" style="display:none;">
+                <h2><i class="fas fa-utensils"></i> Proses Dapur</h2>
+                <div class="status-indicator">
+                    <div class="status-step completed">
+                        <div class="status-dot"><i class="fas fa-check"></i></div>
+                        <div class="status-label">Keranjang</div>
+                    </div>
+                    <div class="status-step completed">
+                        <div class="status-dot"><i class="fas fa-check"></i></div>
+                        <div class="status-label">Checkout</div>
+                    </div>
+                    <div class="status-step completed">
+                        <div class="status-dot"><i class="fas fa-check"></i></div>
+                        <div class="status-label">Pembayaran</div>
+                    </div>
+                    <div class="status-step active">
+                        <div class="status-dot">4</div>
+                        <div class="status-label">Selesai</div>
+                    </div>
+                </div>
+                <div class="empty-state">
+                    <i class="fas fa-chef-hat"></i>
+                    <p>Pesanan sedang diproses di dapur...</p>
+                    <p>Silakan tunggu, makanan & minuman Anda akan segera siap</p>
+                </div>
+                <button id="lanjut-pengiriman" class="accent">
+                    <i class="fas fa-truck"></i> Lanjut ke Pengiriman
+                </button>
+            </section>
+
+            <!-- MODUL PENGIRIMAN -->
+            <section id="modul-pengiriman" class="modul" style="display:none;">
+                <h2><i class="fas fa-truck"></i> Pengiriman</h2>
+                <div class="status-indicator">
+                    <div class="status-step completed">
+                        <div class="status-dot"><i class="fas fa-check"></i></div>
+                        <div class="status-label">Keranjang</div>
+                    </div>
+                    <div class="status-step completed">
+                        <div class="status-dot"><i class="fas fa-check"></i></div>
+                        <div class="status-label">Checkout</div>
+                    </div>
+                    <div class="status-step completed">
+                        <div class="status-dot"><i class="fas fa-check"></i></div>
+                        <div class="status-label">Pembayaran</div>
+                    </div>
+                    <div class="status-step completed">
+                        <div class="status-dot"><i class="fas fa-check"></i></div>
+                        <div class="status-label">Selesai</div>
+                    </div>
+                </div>
+                <div id="info-pengiriman"></div>
+                <button id="selesai" class="secondary">
+                    <i class="fas fa-check-circle"></i> Selesaikan Pesanan
+                </button>
+            </section>
+
+            <!-- MODUL DATABASE -->
+            <section id="modul-database" class="modul">
+                <h2><i class="fas fa-database"></i> Riwayat Pesanan</h2>
+                <div id="riwayat"></div>
+                <div class="empty-state" id="empty-history">
+                    <i class="fas fa-history"></i>
+                    <p>Belum ada riwayat pesanan</p>
+                    <p>Pesanan yang telah selesai akan muncul di sini</p>
+                </div>
+            </section>
+        </main>
+
+        <!-- Modal Edit Item -->
+        <div id="edit-modal" class="edit-modal">
+            <div class="edit-modal-content">
+                <h3><i class="fas fa-edit"></i> Edit Item Keranjang</h3>
+                <form id="edit-form">
+                    <input type="hidden" id="edit-item-id">
+                    <div class="edit-form-group">
+                        <label for="edit-item-name">Nama Item:</label>
+                        <input type="text" id="edit-item-name" readonly>
+                    </div>
+                    <div class="edit-form-group">
+                        <label for="edit-item-price">Harga per Item:</label>
+                        <input type="number" id="edit-item-price" readonly>
+                    </div>
+                    <div class="edit-form-group">
+                        <label for="edit-item-quantity">Jumlah:</label>
+                        <input type="number" id="edit-item-quantity" min="1" max="20" required>
+                    </div>
+                    <div class="edit-form-group">
+                        <label for="edit-item-catatan">Catatan (Opsional):</label>
+                        <textarea id="edit-item-catatan" placeholder="Contoh: Tidak pedas, tambah gula, es batu, dll." rows="3"></textarea>
+                    </div>
+                    <div class="edit-modal-buttons">
+                        <button type="button" id="cancel-edit" class="cancel-btn">
+                            <i class="fas fa-times"></i> Batal
+                        </button>
+                        <button type="submit" class="secondary">
+                            <i class="fas fa-save"></i> Simpan Perubahan
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <footer>
+            © 2025 Coffe Mardupi | Coffee & Food Excellence | ig: coffee_mardupi
+        </footer>
+    </div>
+
+    <script>
+        // ===== LOGIN & REGISTRATION SYSTEM =====
+        let users = JSON.parse(localStorage.getItem('registeredUsers')) || [];
+        let currentUser = JSON.parse(localStorage.getItem('currentUser'));
+
+        // Tambah user demo jika belum ada
+        if (users.length === 0) {
+            users = [
+                {
+                    name: "Administrator",
+                    email: "admin@example.com",
+                    username: "admin",
+                    password: "password123"
+                }
+            ];
+            localStorage.setItem('registeredUsers', JSON.stringify(users));
+        }
+
+        // DOM Elements untuk login
+        const loginPage = document.getElementById('loginPage');
+        const coffeApp = document.getElementById('coffeApp');
+        const loginForm = document.getElementById('loginForm');
+        const registerForm = document.getElementById('registerForm');
+        const loginUsernameInput = document.getElementById('loginUsername');
+        const loginPasswordInput = document.getElementById('loginPassword');
+        const loginUsernameError = document.getElementById('loginUsernameError');
+        const loginPasswordError = document.getElementById('loginPasswordError');
+        const successMessage = document.getElementById('successMessage');
+        const showLoginPassword = document.getElementById('showLoginPassword');
+        const showRegisterPassword = document.getElementById('showRegisterPassword');
+        const showConfirmPassword = document.getElementById('showConfirmPassword');
+        const forgotPasswordLink = document.getElementById('forgotPassword');
+        const showRegisterLink = document.getElementById('showRegister');
+        const showLoginLink = document.getElementById('showLogin');
+        const rememberMe = document.getElementById('rememberMe');
+        const logoutBtn = document.getElementById('logoutBtn');
+        const userAvatar = document.getElementById('userAvatar');
+        const userName = document.getElementById('userName');
+        const userEmail = document.getElementById('userEmail');
+
+        // Registrasi elements
+        const registerNameInput = document.getElementById('registerName');
+        const registerEmailInput = document.getElementById('registerEmail');
+        const registerUsernameInput = document.getElementById('registerUsername');
+        const registerPasswordInput = document.getElementById('registerPassword');
+        const confirmPasswordInput = document.getElementById('confirmPassword');
+        const passwordStrength = document.getElementById('passwordStrength');
+
+        // Error elements untuk registrasi
+        const registerNameError = document.getElementById('registerNameError');
+        const registerEmailError = document.getElementById('registerEmailError');
+        const registerUsernameError = document.getElementById('registerUsernameError');
+        const registerPasswordError = document.getElementById('registerPasswordError');
+        const confirmPasswordError = document.getElementById('confirmPasswordError');
+
+        // Check if user is already logged in
+        function checkLoginStatus() {
+            if (currentUser) {
+                showCoffeApp(currentUser);
+            }
+        }
+
+        // Tampilkan Coffe Mardupi App setelah login
+        function showCoffeApp(user) {
+            loginPage.style.display = 'none';
+            coffeApp.style.display = 'block';
+            
+            // Update user info di header
+            userName.textContent = user.name;
+            userEmail.textContent = user.email;
+            userAvatar.textContent = user.name.charAt(0).toUpperCase();
+            
+            // Initialize Coffe Mardupi App
+            initializeCoffeApp();
+        }
+
+        // Login form validation
+        loginForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Reset error messages
+            loginUsernameError.style.display = 'none';
+            loginPasswordError.style.display = 'none';
+            successMessage.style.display = 'none';
+            
+            let isValid = true;
+            
+            // Validate username/email
+            const usernameValue = loginUsernameInput.value.trim();
+            if (!usernameValue) {
+                loginUsernameError.textContent = 'Username/email harus diisi!';
+                loginUsernameError.style.display = 'block';
+                isValid = false;
+            }
+            
+            // Validate password
+            const passwordValue = loginPasswordInput.value.trim();
+            if (!passwordValue) {
+                loginPasswordError.textContent = 'Password harus diisi!';
+                loginPasswordError.style.display = 'block';
+                isValid = false;
+            }
+            
+            // If form is valid, check credentials
+            if (isValid) {
+                // Cari user berdasarkan username atau email
+                const user = users.find(u => 
+                    u.username === usernameValue || u.email === usernameValue
+                );
+                
+                if (user && user.password === passwordValue) {
+                    // Save credentials if "Remember me" is checked
+                    if (rememberMe.checked) {
+                        localStorage.setItem('savedUsername', usernameValue);
+                        localStorage.setItem('rememberMe', 'true');
+                    } else {
+                        localStorage.removeItem('savedUsername');
+                        localStorage.removeItem('rememberMe');
+                    }
+                    
+                    // Simpan info user yang sedang login
+                    currentUser = user;
+                    localStorage.setItem('currentUser', JSON.stringify(user));
+                    
+                    // Show success message
+                    successMessage.style.display = 'block';
+                    successMessage.textContent = `Login berhasil! Selamat datang, ${user.name}!`;
+                    successMessage.style.backgroundColor = '#388E3C';
+                    successMessage.style.borderLeftColor = '#2E7D32';
+                    
+                    // Reset form
+                    loginForm.reset();
+                    
+                    // Redirect to Coffe Mardupi App setelah 1 detik
+                    setTimeout(() => {
+                        showCoffeApp(user);
+                    }, 1000);
+                } else {
+                    // Show error for invalid credentials
+                    loginPasswordError.textContent = 'Username/email atau password salah!';
+                    loginPasswordError.style.display = 'block';
+                    successMessage.textContent = 'Login gagal! Periksa kembali username dan password.';
+                    successMessage.style.backgroundColor = '#D84315';
+                    successMessage.style.borderLeftColor = '#BF360C';
+                    successMessage.style.display = 'block';
+                }
+            }
+        });
+
+        // Registration form validation
+        registerForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Reset error messages
+            hideAllRegistrationErrors();
+            
+            let isValid = true;
+            
+            // Validate name
+            const nameValue = registerNameInput.value.trim();
+            if (!nameValue) {
+                registerNameError.textContent = 'Nama lengkap harus diisi!';
+                registerNameError.style.display = 'block';
+                isValid = false;
+            }
+            
+            // Validate email
+            const emailValue = registerEmailInput.value.trim();
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailValue) {
+                registerEmailError.textContent = 'Email harus diisi!';
+                registerEmailError.style.display = 'block';
+                isValid = false;
+            } else if (!emailRegex.test(emailValue)) {
+                registerEmailError.textContent = 'Email tidak valid!';
+                registerEmailError.style.display = 'block';
+                isValid = false;
+            } else if (users.some(u => u.email === emailValue)) {
+                registerEmailError.textContent = 'Email sudah terdaftar!';
+                registerEmailError.style.display = 'block';
+                isValid = false;
+            }
+            
+            // Validate username
+            const usernameValue = registerUsernameInput.value.trim();
+            if (!usernameValue) {
+                registerUsernameError.textContent = 'Username harus diisi!';
+                registerUsernameError.style.display = 'block';
+                isValid = false;
+            } else if (usernameValue.length < 3) {
+                registerUsernameError.textContent = 'Username minimal 3 karakter!';
+                registerUsernameError.style.display = 'block';
+                isValid = false;
+            } else if (users.some(u => u.username === usernameValue)) {
+                registerUsernameError.textContent = 'Username sudah digunakan!';
+                registerUsernameError.style.display = 'block';
+                isValid = false;
+            }
+            
+            // Validate password
+            const passwordValue = registerPasswordInput.value.trim();
+            if (!passwordValue) {
+                registerPasswordError.textContent = 'Password harus diisi!';
+                registerPasswordError.style.display = 'block';
+                isValid = false;
+            } else if (passwordValue.length < 6) {
+                registerPasswordError.textContent = 'Password minimal 6 karakter!';
+                registerPasswordError.style.display = 'block';
+                isValid = false;
+            }
+            
+            // Validate confirm password
+            const confirmPasswordValue = confirmPasswordInput.value.trim();
+            if (!confirmPasswordValue) {
+                confirmPasswordError.textContent = 'Konfirmasi password harus diisi!';
+                confirmPasswordError.style.display = 'block';
+                isValid = false;
+            } else if (passwordValue !== confirmPasswordValue) {
+                confirmPasswordError.textContent = 'Password tidak cocok!';
+                confirmPasswordError.style.display = 'block';
+                isValid = false;
+            }
+            
+            // If form is valid, register new user
+            if (isValid) {
+                // Create new user object
+                const newUser = {
+                    name: nameValue,
+                    email: emailValue,
+                    username: usernameValue,
+                    password: passwordValue
+                };
+                
+                // Add to users array
+                users.push(newUser);
+                
+                // Save to localStorage
+                localStorage.setItem('registeredUsers', JSON.stringify(users));
+                
+                // Show success message
+                successMessage.textContent = `Pendaftaran berhasil! Akun ${usernameValue} telah dibuat.`;
+                successMessage.style.backgroundColor = '#388E3C';
+                successMessage.style.borderLeftColor = '#2E7D32';
+                successMessage.style.display = 'block';
+                
+                // Reset form
+                registerForm.reset();
+                passwordStrength.style.width = '0%';
+                passwordStrength.className = 'strength-meter';
+                
+                // Auto switch to login form after 2 seconds
+                setTimeout(() => {
+                    showLoginLink.click();
+                    loginUsernameInput.value = usernameValue;
+                    loginPasswordInput.value = passwordValue;
+                    successMessage.textContent = `Akun ${usernameValue} berhasil dibuat! Silakan login.`;
+                    successMessage.style.backgroundColor = '#8B4513';
+                    successMessage.style.borderLeftColor = '#5D4037';
+                }, 2000);
+            }
+        });
+
+        // Fungsi untuk menyembunyikan semua error registrasi
+        function hideAllRegistrationErrors() {
+            registerNameError.style.display = 'none';
+            registerEmailError.style.display = 'none';
+            registerUsernameError.style.display = 'none';
+            registerPasswordError.style.display = 'none';
+            confirmPasswordError.style.display = 'none';
+        }
+
+        // Tampilkan form registrasi
+        showRegisterLink.addEventListener('click', function(e) {
+            e.preventDefault();
+            loginForm.style.display = 'none';
+            registerForm.style.display = 'block';
+            successMessage.style.display = 'none';
+        });
+
+        // Tampilkan form login
+        showLoginLink.addEventListener('click', function(e) {
+            e.preventDefault();
+            registerForm.style.display = 'none';
+            loginForm.style.display = 'block';
+            successMessage.style.display = 'none';
+            
+            // Reset form registrasi
+            registerForm.reset();
+            hideAllRegistrationErrors();
+        });
+
+        // Toggle password visibility untuk login
+        showLoginPassword.addEventListener('click', function() {
+            togglePasswordVisibility(loginPasswordInput, this);
+        });
+
+        // Toggle password visibility untuk registrasi
+        showRegisterPassword.addEventListener('click', function() {
+            togglePasswordVisibility(registerPasswordInput, this);
+        });
+
+        // Toggle password visibility untuk konfirmasi
+        showConfirmPassword.addEventListener('click', function() {
+            togglePasswordVisibility(confirmPasswordInput, this);
+        });
+
+        // Fungsi untuk toggle password visibility
+        function togglePasswordVisibility(passwordField, toggleElement) {
+            const eyeIcon = toggleElement.querySelector('i');
+            
+            if (passwordField.type === 'password') {
+                passwordField.type = 'text';
+                eyeIcon.classList.remove('fa-eye');
+                eyeIcon.classList.add('fa-eye-slash');
+            } else {
+                passwordField.type = 'password';
+                eyeIcon.classList.remove('fa-eye-slash');
+                eyeIcon.classList.add('fa-eye');
+            }
+        }
+
+        // Validasi kekuatan password
+        registerPasswordInput.addEventListener('input', function() {
+            const password = this.value;
+            let strength = 0;
+            
+            if (password.length >= 6) strength += 25;
+            if (/[A-Z]/.test(password)) strength += 25;
+            if (/[0-9]/.test(password)) strength += 25;
+            if (/[^A-Za-z0-9]/.test(password)) strength += 25;
+            
+            passwordStrength.style.width = strength + '%';
+            
+            // Update class berdasarkan kekuatan
+            passwordStrength.className = 'strength-meter';
+            if (strength < 50) {
+                passwordStrength.classList.add('strength-weak');
+            } else if (strength < 75) {
+                passwordStrength.classList.add('strength-medium');
+            } else {
+                passwordStrength.classList.add('strength-strong');
+            }
+        });
+
+        // Forgot password functionality
+        forgotPasswordLink.addEventListener('click', function(e) {
+            e.preventDefault();
+            const email = prompt('Masukkan email Anda untuk mereset password:');
+            
+            if (email) {
+                // Cari user berdasarkan email
+                const user = users.find(u => u.email === email);
+                
+                if (user) {
+                    const newPassword = prompt('Masukkan password baru (min. 6 karakter):');
+                    
+                    if (newPassword && newPassword.length >= 6) {
+                        // Update password
+                        user.password = newPassword;
+                        localStorage.setItem('registeredUsers', JSON.stringify(users));
+                        
+                        alert(`Password untuk ${email} berhasil direset!`);
+                    } else {
+                        alert('Password baru tidak valid! Minimal 6 karakter.');
+                    }
+                } else {
+                    alert('Email tidak ditemukan dalam sistem!');
+                }
+            }
+        });
+
+        // Logout functionality
+        logoutBtn.addEventListener('click', function() {
+            if (confirm('Apakah Anda yakin ingin logout?')) {
+                localStorage.removeItem('currentUser');
+                currentUser = null;
+                
+                // Show login page
+                coffeApp.style.display = 'none';
+                loginPage.style.display = 'flex';
+                loginForm.style.display = 'block';
+                registerForm.style.display = 'none';
+                successMessage.style.display = 'none';
+                loginForm.reset();
+            }
+        });
+
+        // Check if credentials are saved in localStorage saat page load
+        window.addEventListener('DOMContentLoaded', () => {
+            checkLoginStatus();
+            
+            const savedUsername = localStorage.getItem('savedUsername');
+            const savedRememberMe = localStorage.getItem('rememberMe');
+            
+            if (savedUsername && savedRememberMe === 'true') {
+                loginUsernameInput.value = savedUsername;
+                rememberMe.checked = true;
+            }
+        });
+
+        // ===== COFFE MARDUPI APP FUNCTIONALITY =====
+        function initializeCoffeApp() {
+            // Data menu makanan
+            const menuMakanan = [
+                { id: 1, name: "Indomie Nyemek", price: 18000, image: "images/im.jpeg", category: "makanan" },
+                { id: 2, name: "Nasi Mangkok Gyu-Tamago", price: 30000, image: "images/nmg.jpeg", category: "makanan" },
+                { id: 3, name: "Nasi Mangkok Golden Trio", price: 35000, image: "images/rice bowl ebi furai dan beef teriyaki .jpeg", category: "makanan" },
+                { id: 4, name: "Nasi Mangkok Golden Crunch", price: 28000, image: "images/ebi furai rice bowl .jpeg", category: "makanan" },
+                { id: 5, name: "Dupi Nasgor Spesial", price: 23000, image: "images/nasi goreng telur.jpeg", category: "makanan" },
+                { id: 6, name: "Tahu Cabe Garem", price: 15000, image: "images/tahu crispy sambal bawang.jpeg", category: "makanan" },
+                { id: 19, name: "Nasi Ayam Bumbu Hitam", price: 23000, image: "images/nasyam.jpeg", category: "makanan" },
+                { id: 20, name: "Nasi Bebek Bumbu Hitam", price: 28000, image: "images/nasbekh.jpg", category: "makanan" },
+                { id: 21, name: "Kentang Goreng (French Fries)", price: 18000, image: "images/kentang goreng (French fries).jpeg", category: "makanan" },
+                { id: 22, name: "Roti Panggang Coklat Keju", price: 12000, image: "images/rotbag.jpg", category: "makanan" },
+            ];
+
+            // Data menu minuman
+            const menuMinuman = [
+                { id: 7, name: "Ice Coklat Susu", price: 13000, image: "images1/ice coklat1.jpeg", category: "minuman" },
+                { id: 8, name: "Ice Owreo Susu", price: 15000, image: "images1/ice oreo.jpeg", category: "minuman" },
+                { id: 9, name: "Ice Dino Coklat Sport Susu", price: 15000, image: "images1/ice dino.jpeg", category: "minuman" },
+                { id: 10, name: "Ice Coklat Hazelnut Susu", price: 13000, image: "images1/ice coklat.jpeg", category: "minuman" },
+                { id: 11, name: "Ice Matcha Susu", price: 13000, image: "images1/ice green.jpeg", category: "minuman" },
+                { id: 12, name: "Ice Kurma Susu", price: 13000, image: "images1/ice kurma.jpeg", category: "minuman" },
+                { id: 29, name: "Ice Anggur Susu", price: 13000, image: "images1/ice anggur.jpeg", category: "minuman" },
+                { id: 30, name: "Ice Taro Susu", price: 13000, image: "images1/icetar.jpeg", category: "minuman" },
+                { id: 31, name: "Ice Thai Tea Susu", price: 13000, image: "images1/ice thai.jpeg", category: "minuman" },
+                { id: 32, name: "Ice Regal Susu", price: 15000, image: "images1/regal.jpg", category: "minuman" },
+                { id: 33, name: "Ice Kopsus Regal", price: 20000, image: "images1/kopreg.jpg", category: "minuman" },
+                { id: 34, name: "Ice Kopsus Caramel", price: 20000, image: "images1/kopka.jpg", category: "minuman" },
+                { id: 35, name: "Ice Kopsus Aren", price: 17000, image: "images1/kopar.jpeg", category: "minuman" },
+                { id: 36, name: "Air Mineral", price: 5000, image: "images1/air.jpg", category: "minuman" },
+            ];
+
+            // Data menu kopi spesial
+            const menuKopi = [
+                { id: 13, name: "Hot Mardupicano Arent", price: 13000, image: "images2/hot arent.jpeg", category: "kopi" },
+                { id: 14, name: "Hot Mardupicano", price: 10000, image: "images2/hotmar.jpeg", category: "kopi" },
+                { id: 15, name: "Extra Shoot", price: 8000, image: "images2/ekstra.jpeg", category: "kopi" },
+            ];
+
+            // State aplikasi
+            let cart = JSON.parse(localStorage.getItem(`cart_${currentUser?.username}`)) || [];
+            let orderHistory = JSON.parse(localStorage.getItem('orderHistory')) || [];
+
+            // Inisialisasi aplikasi
+            renderAllMenus();
+            renderCart();
+            renderOrderHistory();
+            setupMenuTabs();
+            
+            // Event listeners untuk Coffe Mardupi
+            document.getElementById('lanjut-checkout').addEventListener('click', showCheckout);
+            document.getElementById('checkout-form').addEventListener('submit', processPayment);
+            document.getElementById('lanjut-dapur').addEventListener('click', showDapur);
+            document.getElementById('lanjut-pengiriman').addEventListener('click', showPengiriman);
+            document.getElementById('selesai').addEventListener('click', completeOrder);
+            document.getElementById('clear-cart').addEventListener('click', clearCart);
+            document.getElementById('cancel-edit').addEventListener('click', closeEditModal);
+            document.getElementById('edit-form').addEventListener('submit', saveEdit);
+
+            // Setup menu tabs
+            function setupMenuTabs() {
+                const tabs = document.querySelectorAll('.menu-tab');
+                tabs.forEach(tab => {
+                    tab.addEventListener('click', () => {
+                        // Remove active class from all tabs and contents
+                        tabs.forEach(t => t.classList.remove('active'));
+                        document.querySelectorAll('.menu-content').forEach(content => {
+                            content.classList.remove('active');
+                        });
+                        
+                        // Add active class to clicked tab and corresponding content
+                        tab.classList.add('active');
+                        const tabId = tab.getAttribute('data-tab');
+                        document.getElementById(`${tabId}-content`).classList.add('active');
+                    });
+                });
+            }
+
+            // Render semua menu
+            function renderAllMenus() {
+                renderMenu('menu-makanan', menuMakanan, 'Makanan');
+                renderMenu('menu-minuman', menuMinuman, 'Minuman');
+                renderMenu('menu-kopi', menuKopi, 'Kopi Spesial');
+            }
+
+            // Render menu berdasarkan kategori
+            function renderMenu(containerId, items, category) {
+                const container = document.getElementById(containerId);
+                container.innerHTML = '';
+                
+                items.forEach(item => {
+                    const menuItem = document.createElement('div');
+                    menuItem.className = `menu-item ${category.toLowerCase()}`;
+                    menuItem.innerHTML = `
+                        <div class="category-badge">${category}</div>
+                        <img src="${item.image}" alt="${item.name}" onerror="this.src='https://via.placeholder.com/160x120/8B4513/FFFFFF?text=${encodeURIComponent(item.name)}'">
+                        <h3>${item.name}</h3>
+                        <p class="price">Rp ${item.price.toLocaleString('id-ID')}</p>
+                    `;
+                    menuItem.addEventListener('click', () => addToCart(item));
+                    container.appendChild(menuItem);
+                });
+            }
+
+            // CREATE: Tambah item ke keranjang
+            function addToCart(item) {
+                const existingItem = cart.find(cartItem => cartItem.id === item.id);
+                
+                if (existingItem) {
+                    existingItem.quantity += 1;
+                } else {
+                    cart.push({
+                        id: item.id,
+                        name: item.name,
+                        price: item.price,
+                        quantity: 1,
+                        catatan: '',
+                        category: item.category
+                    });
+                }
+                
+                renderCart();
+                showNotification(`${item.name} ditambahkan ke keranjang`);
+            }
+
+            // READ: Render keranjang
+            function renderCart() {
+                const cartItems = document.getElementById('cart-items');
+                const totalElement = document.getElementById('total');
+                const emptyCart = document.getElementById('empty-cart');
+                
+                cartItems.innerHTML = '';
+                
+                if (cart.length === 0) {
+                    emptyCart.style.display = 'block';
+                    totalElement.textContent = '0';
+                    // Simpan cart kosong ke localStorage
+                    localStorage.setItem(`cart_${currentUser?.username}`, JSON.stringify(cart));
+                    return;
+                }
+                
+                emptyCart.style.display = 'none';
+                
+                let total = 0;
+                
+                cart.forEach(item => {
+                    const itemTotal = item.price * item.quantity;
+                    total += itemTotal;
+                    
+                    const cartItem = document.createElement('div');
+                    cartItem.className = 'cart-item';
+                    cartItem.innerHTML = `
+                        <div class="cart-item-info">
+                            <div class="cart-item-name">${item.name}</div>
+                            <div class="cart-item-price">Rp ${item.price.toLocaleString('id-ID')} x ${item.quantity}</div>
+                            ${item.catatan ? `<div class="cart-item-catatan"><small>Catatan: ${item.catatan}</small></div>` : ''}
+                        </div>
+                        <div class="cart-item-controls">
+                            <button class="decrease" data-id="${item.id}">-</button>
+                            <span class="quantity-display">${item.quantity}</span>
+                            <button class="increase" data-id="${item.id}">+</button>
+                            <button class="edit-btn" data-id="${item.id}"><i class="fas fa-edit"></i></button>
+                            <button class="delete-btn" data-id="${item.id}"><i class="fas fa-trash"></i></button>
+                        </div>
+                    `;
+                    
+                    cartItems.appendChild(cartItem);
+                });
+                
+                // Update total
+                totalElement.textContent = total.toLocaleString('id-ID');
+                
+                // Simpan cart ke localStorage
+                localStorage.setItem(`cart_${currentUser?.username}`, JSON.stringify(cart));
+                
+                // Add event listeners for cart controls
+                document.querySelectorAll('.increase').forEach(button => {
+                    button.addEventListener('click', (e) => {
+                        const id = parseInt(e.target.closest('button').dataset.id);
+                        increaseQuantity(id);
+                    });
+                });
+                
+                document.querySelectorAll('.decrease').forEach(button => {
+                    button.addEventListener('click', (e) => {
+                        const id = parseInt(e.target.closest('button').dataset.id);
+                        decreaseQuantity(id);
+                    });
+                });
+                
+                document.querySelectorAll('.edit-btn').forEach(button => {
+                    button.addEventListener('click', (e) => {
+                        const id = parseInt(e.target.closest('button').dataset.id);
+                        openEditModal(id);
+                    });
+                });
+                
+                document.querySelectorAll('.delete-btn').forEach(button => {
+                    button.addEventListener('click', (e) => {
+                        const id = parseInt(e.target.closest('button').dataset.id);
+                        removeFromCart(id);
+                    });
+                });
+            }
+
+            // UPDATE: Increase item quantity
+            function increaseQuantity(id) {
+                const item = cart.find(item => item.id === id);
+                if (item) {
+                    item.quantity += 1;
+                    renderCart();
+                    showNotification(`Jumlah ${item.name} ditambah menjadi ${item.quantity}`);
+                }
+            }
+
+            // UPDATE: Decrease item quantity
+            function decreaseQuantity(id) {
+                const item = cart.find(item => item.id === id);
+                if (item && item.quantity > 1) {
+                    item.quantity -= 1;
+                    renderCart();
+                    showNotification(`Jumlah ${item.name} dikurangi menjadi ${item.quantity}`);
+                }
+            }
+
+            // UPDATE: Open edit modal
+            function openEditModal(id) {
+                const item = cart.find(item => item.id === id);
+                if (item) {
+                    document.getElementById('edit-item-id').value = item.id;
+                    document.getElementById('edit-item-name').value = item.name;
+                    document.getElementById('edit-item-price').value = item.price;
+                    document.getElementById('edit-item-quantity').value = item.quantity;
+                    document.getElementById('edit-item-catatan').value = item.catatan || '';
+                    
+                    document.getElementById('edit-modal').style.display = 'flex';
+                }
+            }
+
+            // UPDATE: Save edit
+            function saveEdit(e) {
+                e.preventDefault();
+                
+                const id = parseInt(document.getElementById('edit-item-id').value);
+                const quantity = parseInt(document.getElementById('edit-item-quantity').value);
+                const catatan = document.getElementById('edit-item-catatan').value;
+                
+                const item = cart.find(item => item.id === id);
+                if (item) {
+                    item.quantity = quantity;
+                    item.catatan = catatan;
+                    renderCart();
+                    closeEditModal();
+                    showNotification(`${item.name} berhasil diupdate`);
+                }
+            }
+
+            // UPDATE: Close edit modal
+            function closeEditModal() {
+                document.getElementById('edit-modal').style.display = 'none';
+                document.getElementById('edit-form').reset();
+            }
+
+            // DELETE: Remove item from cart
+            function removeFromCart(id) {
+                const itemIndex = cart.findIndex(item => item.id === id);
+                if (itemIndex !== -1) {
+                    const itemName = cart[itemIndex].name;
+                    cart.splice(itemIndex, 1);
+                    renderCart();
+                    showNotification(`${itemName} dihapus dari keranjang`);
+                }
+            }
+
+            // DELETE: Clear entire cart
+            function clearCart() {
+                if (cart.length === 0) {
+                    showNotification('Keranjang sudah kosong!');
+                    return;
+                }
+                
+                if (confirm('Apakah Anda yakin ingin mengosongkan keranjang?')) {
+                    cart = [];
+                    renderCart();
+                    showNotification('Keranjang berhasil dikosongkan');
+                }
+            }
+
+            // Show checkout form
+            function showCheckout() {
+                if (cart.length === 0) {
+                    showNotification('Keranjang masih kosong!');
+                    return;
+                }
+                
+                document.getElementById('modul-keranjang').style.display = 'none';
+                document.getElementById('modul-checkout').style.display = 'block';
+            }
+
+            // Process payment
+            function processPayment(e) {
+                e.preventDefault();
+                
+                const nama = document.getElementById('nama').value;
+                const alamat = document.getElementById('alamat').value;
+                const metodePembayaran = document.getElementById('metode-pembayaran').value;
+                
+                // Calculate total
+                const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+                
+                // Show payment info
+                document.getElementById('modul-checkout').style.display = 'none';
+                document.getElementById('modul-pembayaran').style.display = 'block';
+                
+                const infoPembayaran = document.getElementById('info-pembayaran');
+                infoPembayaran.innerHTML = `
+                    <h3>Detail Pembayaran</h3>
+                    <p><strong>Nama:</strong> ${nama}</p>
+                    <p><strong>Alamat:</strong> ${alamat}</p>
+                    <p><strong>Metode Pembayaran:</strong> ${metodePembayaran}</p>
+                    <p><strong>Total Pembayaran:</strong> Rp ${total.toLocaleString('id-ID')}</p>
+                    <p>Silakan selesaikan pembayaran Anda</p>
+                `;
+            }
+
+            // Show dapur module
+            function showDapur() {
+                document.getElementById('modul-pembayaran').style.display = 'none';
+                document.getElementById('modul-dapur').style.display = 'block';
+            }
+
+            // Show pengiriman module
+            function showPengiriman() {
+                const nama = document.getElementById('nama').value;
+                const alamat = document.getElementById('alamat').value;
+                
+                document.getElementById('modul-dapur').style.display = 'none';
+                document.getElementById('modul-pengiriman').style.display = 'block';
+                
+                const infoPengiriman = document.getElementById('info-pengiriman');
+                infoPengiriman.innerHTML = `
+                    <h3>Detail Pengiriman</h3>
+                    <p><strong>Nama:</strong> ${nama}</p>
+                    <p><strong>Alamat:</strong> ${alamat}</p>
+                    <p><strong>Status:</strong> Pesanan sedang dalam perjalanan</p>
+                    <p>Perkiraan sampai: 30-45 menit</p>
+                `;
+            }
+
+            // Complete order
+            function completeOrder() {
+                const nama = document.getElementById('nama').value;
+                const alamat = document.getElementById('alamat').value;
+                const metodePembayaran = document.getElementById('metode-pembayaran').value;
+                const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+                
+                // Create order object
+                const order = {
+                    id: Date.now(),
+                    nama,
+                    alamat,
+                    metodePembayaran,
+                    items: [...cart],
+                    total,
+                    date: new Date().toLocaleString('id-ID'),
+                    customer: currentUser.name,
+                    customerEmail: currentUser.email
+                };
+                
+                // Add to order history
+                orderHistory.unshift(order);
+                localStorage.setItem('orderHistory', JSON.stringify(orderHistory));
+                
+                // Reset cart and form
+                cart = [];
+                localStorage.setItem(`cart_${currentUser?.username}`, JSON.stringify(cart));
+                document.getElementById('checkout-form').reset();
+                
+                // Show success message
+                showNotification('Pesanan berhasil diselesaikan! Terima kasih.');
+                
+                // Return to initial state
+                document.getElementById('modul-pengiriman').style.display = 'none';
+                document.getElementById('modul-keranjang').style.display = 'block';
+                
+                // Update UI
+                renderCart();
+                renderOrderHistory();
+            }
+
+            // Render order history
+            function renderOrderHistory() {
+                const riwayatElement = document.getElementById('riwayat');
+                const emptyHistory = document.getElementById('empty-history');
+                
+                riwayatElement.innerHTML = '';
+                
+                if (orderHistory.length === 0) {
+                    emptyHistory.style.display = 'block';
+                    return;
+                }
+                
+                emptyHistory.style.display = 'none';
+                
+                // Filter order history untuk user yang login
+                const userOrders = orderHistory.filter(order => 
+                    order.customer === currentUser.name && order.customerEmail === currentUser.email
+                );
+                
+                if (userOrders.length === 0) {
+                    emptyHistory.style.display = 'block';
+                    return;
+                }
+                
+                userOrders.forEach(order => {
+                    const riwayatItem = document.createElement('div');
+                    riwayatItem.className = 'riwayat-item';
+                    
+                    const itemsList = order.items.map(item => 
+                        `${item.name} (${item.quantity}x)${item.catatan ? ` - ${item.catatan}` : ''}`
+                    ).join(', ');
+                    
+                    riwayatItem.innerHTML = `
+                        <div class="riwayat-header">
+                            <span class="riwayat-nama">Order #${order.id.toString().slice(-6)}</span>
+                            <span class="riwayat-tanggal">${order.date}</span>
+                        </div>
+                        <div class="riwayat-detail">
+                            <p><strong>Items:</strong> ${itemsList}</p>
+                            <p><strong>Total:</strong> Rp ${order.total.toLocaleString('id-ID')}</p>
+                            <p><strong>Metode Bayar:</strong> ${order.metodePembayaran}</p>
+                            <p><strong>Status:</strong> Selesai</p>
+                        </div>
+                    `;
+                    
+                    riwayatElement.appendChild(riwayatItem);
+                });
+            }
+
+            // Show notification
+            function showNotification(message) {
+                // Create notification element
+                const notification = document.createElement('div');
+                notification.style.cssText = `
+                    position: fixed;
+                    top: 20px;
+                    right: 20px;
+                    background: var(--success);
+                    color: white;
+                    padding: 12px 20px;
+                    border-radius: 8px;
+                    box-shadow: var(--shadow);
+                    z-index: 1000;
+                    transform: translateX(150%);
+                    transition: transform 0.3s ease;
+                `;
+                notification.textContent = message;
+                
+                document.body.appendChild(notification);
+                
+                // Animate in
+                setTimeout(() => {
+                    notification.style.transform = 'translateX(0)';
+                }, 100);
+                
+                // Animate out and remove
+                setTimeout(() => {
+                    notification.style.transform = 'translateX(150%)';
+                    setTimeout(() => {
+                        document.body.removeChild(notification);
+                    }, 300);
+                }, 3000);
+            }
+        }
+    </script>
+</body>
+</html>
